@@ -28,4 +28,6 @@ docker run --name mongoclient \
     mongoclient/mongoclient
 
 npm install sequelize -> instalando o sequelize
-npm install pg-hstore pg -> instalando os drivers do banco de dados.
+npm install pg-hstore pg -> instalando os drivers do banco de dados
+npm install hapi
+npm install mocha
