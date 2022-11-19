@@ -7,32 +7,33 @@ describe.only('Suíte de testes da API Heroes', function () {
         app = await api
     })
 
-    it('Listar herois', async () => {
+    it('Listar /herois -> DEVE RETORNAR UM LISTA COM TODOS OBJETOS DO DB', async () => {
         const result = await app.inject({
             method: 'GET',
-            url: '/herois?skip=0&limit=1&nome=Vasco'
+            url: `/herois?skip=0&limit=10`
         })
-        const dados = JSON.parse(result.payload)
         const statusCode = result.statusCode
+        const dados = JSON.parse(result.payload)
+
         assert.deepEqual(statusCode, 200)
         assert.ok(Array.isArray(dados))
     })
 
-    it('Listar /herois -> deve retornar somente 10 registros', async () => {
+    it('Listar /herois -> DEVE RETORNAR O OBJETO CONSULTADO PELA QUERY NOME', async () => {
         const result = await app.inject({
             method: 'GET',
-            url: `/herois?skip=0&limit=10&nome=Vas`
+            url: `/herois?skip=0&limit=10&nome=Vasco`
         })
 
-        const dados = JSON.parse(result.payload)
         const statusCode = result.statusCode
-        
+        const dados = JSON.parse(result.payload)
+
         assert.deepEqual(statusCode, 200)
-        assert.ok(Array.isArray(dados))
+        assert.ok(dados.nome = 'Vasco')
     })
 
-    it('Lista /herois - deve retornar erro de query', async () => {
-        const ERRO_PROPOSITAL = 'string'
+    it('Listar /herois -> DEVE RETORNAR STATUS 500', async () => {
+        const ERRO_PROPOSITAL = 'String onde deveria ser um Number'
         const result = await app.inject({
             method: 'GET',
             url: `/herois?skip=0&limit=${ERRO_PROPOSITAL}&nome=Vasco`
@@ -40,4 +41,4 @@ describe.only('Suíte de testes da API Heroes', function () {
 
         assert.deepEqual(result.statusCode, 500)
     })
-})  
+})
