@@ -42,11 +42,13 @@ class MongooseStrategy extends ICrud {
             : false
     }
 
-    async read(query, skip = 0, limit = 10) {
-        query
-            ? query = { query }
-            : query = {}
-        return await this._schema.find(query).skip(skip).limit(limit).catch(err => console.error('ERRO', err.message))
+    async read({ nome }, skip, limit = 10) {
+        const result = await this._schema.find({ nome })
+            .skip(skip)
+            .limit(limit)
+            .catch(err => console.error('ERRO READ MONGODB', err.message))
+
+        return result
     }
 
     async update(query, item) {
