@@ -42,8 +42,8 @@ class MongooseStrategy extends ICrud {
             : false
     }
 
-    async read({ nome }, skip, limit = 10) {
-        const result = await this._schema.find({ nome })
+    async read(query, skip, limit = 10) {
+        const result = await this._schema.findOne(query)
             .skip(skip)
             .limit(limit)
             .catch(err => console.error('ERRO READ MONGODB', err.message))
@@ -52,7 +52,15 @@ class MongooseStrategy extends ICrud {
     }
 
     async update(query, item) {
-        return await this._schema.updateOne(query, { $set: item })
+        try {
+            const result = await this._schema.findOneAndUpdate(query, { $set: item })
+            return {
+                result,
+                message: 'Herói atualizado com sucesso'
+            }
+        } catch (erroUpdateMongo) {
+            return console.error('ERRO NO MONGO', erroUpdateMongo)
+        }
     }
 
     async delete(query) {
