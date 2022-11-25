@@ -11,13 +11,14 @@ async function main() {
     const connection = MongoDb.connect()
     const context = new Context(new MongoDb(connection, HeroiSchema))
 
-    app.route([
-        ...mapRoutes(new HeroRoute(context), HeroRoute.methods())
-    ])
+    app.route(
+        mapRoutes(new HeroRoute(context), HeroRoute.methods())
+    )
 
     app.start()
         .then(console.log('Servidor rodando na porta ===>', app.info.port))
-    
+        .catch(startError => Error(startError.message))
+
     return app
 }
 
